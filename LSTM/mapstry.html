@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+       #map {
+        height: 600px;
+        width: 60%;
+        padding-left:200px;
+       }
+       .wi{
+       	padding:15px;
+       	font-size:48px;
+       }
+       #icon{
+       	font-size:48px;
+       }
+    </style>
+
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>jQuery UI Datepicker - Default functionality</title>
+<!--   <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  <link rel="stylesheet" href="/resources/demos/style.css"> -->
+  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+ <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script> -->
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+      <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/weather-icons/2.0.9/css/weather-icons.css">
+  <script>
+
+   $( function() {
+    $( "#datepicker" ).datepicker({
+    format: 'mm/dd/yyyy',
+    minDate:'11/14/2017',
+    maxDate: '11/18/2017'
+});
+  } );
+  </script>
+
+
+  </head>
+  <body>
+    <h3>My Google Maps Demo</h3>
+    <div  style="margin:40px;float: left;" id="map"></div>
+<!-- <div style="margin:40px;"><p>hjhkjhjhjhjh</p></div> -->
+
+    <!-- <button onclick="getLocation()">Try It</button> -->
+
+Date: <input id="datepicker"><br>
+<i id="iconn"></i>
+<p id ="location"></p>
+
+<p class ="icon"></p>
+    <script>
+
+
+var x = document.getElementById("location");
+var state;
+
+function getLocation() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(showPosition);
+    } else {
+        console.log("Geolocation is not supported by this browser.");
+    }
+}
+function showPosition(position) {
+    // x.innerHTML = "Latitude: " + position.coords.latitude + 
+    // "<br>Longitude: " + position.coords.longitude;
+    this.lat=position.coords.latitude;
+    this.lon=position.coords.longitude;
+    // console.log("Latitude: innnnnn" +  typeof position.coords.latitude + 
+    // "<br>Longitude: " + position.coords.longitude) 
+
+
+codeLatLng(this.lat, this.lon);
+      	 var uluru = {lat: this.lat, lng: this.lon};
+        // var uluru = {lat: showPosition.lat, lng: showPosition.lon};
+        var map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 6,
+          center: { lat:32.43060420452329, lng: -85.07678304374997},
+          mapTypeId: google.maps.MapTypeId.ROADMAP
+        });
+        var marker = new google.maps.Marker({
+          position: uluru,
+          draggable: true,
+          map: map
+        });
+
+
+     // fog	 rain_drizzle	snow_ice_pellets	hail	thunder	tornado_funnel_cloud
+var label=[0,0,0,0,0,1].join("");//.toString();
+console.log(label)
+var iconCode="10d"
+
+
+switch(label) {
+    case "010000":
+        iconCode="09d"
+        break;
+    case "100000":
+        iconCode="50d"
+        break;
+    case "001000":
+        iconCode="13d"
+        break;
+    case "100000":
+        iconCode="50d"
+        break;
+    case "000010":
+        iconCode="11d"
+        break;        
+    default:
+        iconCode="01d"
+}
+
+switch(label) {
+
+    case "100000":
+        cc="wi-day-fog"
+        break;
+    case "010000":
+        cc="wi-rain"
+        break;
+    case "001000":
+        cc="wi-snow"
+        break;
+    case "100000":
+        cc="wi-hail"
+        break;
+    case "000010":
+        cc="wi-thunderstorm"
+        break; 
+
+    case "000001":
+        cc="wi-tornado"
+        break; 
+             
+    default:
+        cc="wi-day-sunny"
+}
+
+document.getElementById("iconn").className = "wi "+cc;
+
+var iconUrl = "http://openweathermap.org/img/w/" + iconCode + ".png";
+// $(".icon").html("<img src='" + iconUrl  + "'    width='128' height='128' >");
+
+        google.maps.event.addListener(marker, 'dragend', function (event) {
+            // window.open(map, marker);
+             codeLatLng(event.latLng.lat(), event.latLng.lng());
+        });
+
+
+
+}
+
+
+
+function codeLatLng(lat, lng) {
+	geocoder = new google.maps.Geocoder();
+
+    var latlng = new google.maps.LatLng(lat, lng);
+    geocoder.geocode({'latLng': latlng}, function(results, status) {
+      if (status == google.maps.GeocoderStatus.OK) {
+      console.log(results)
+        if (results) {
+         //formatted address
+         // alert(results[2].formatted_address)
+         
+         for (var i = 0; i < results.length; i++) {
+         	if (results[i].formatted_address.split(" ").length<=4) {console.log(results[i].formatted_address);x.innerHTML = results[i].formatted_address;break;}
+         }
+
+        for (var i = 0; i < results.length; i++) {
+         	if (results[i].formatted_address.split(" ").length==2) {
+         		console.log(results[i].formatted_address.split(" ")[0].slice(0,-1));
+         			state = results[i].formatted_address;break;}
+         }
+
+
+        //find country name
+        //      for (var i=0; i<results[0].address_components.length; i++) {
+        //     for (var b=0;b<results[0].address_components[i].types.length;b++) {
+
+        //     //there are different types that might hold a city admin_area_lvl_1 usually does in come cases looking for sublocality type will be more appropriate
+        //         if (results[0].address_components[i].types[b] == "administrative_area_level_1") {
+        //             //this is the object you are looking for
+        //             city= results[0].address_components[i];
+        //             break;
+        //         }
+        //     }
+        // }
+        //city data
+        // alert(city.short_name + "--- " + city.long_name)
+
+
+        } else {
+          alert("No results found");
+        }
+      } else {
+        alert("Geocoder failed due to: " + status);
+      }
+    });
+}
+
+
+
+
+
+
+
+      function initMap() {
+
+getLocation();
+
+      }
+    </script>
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAXPEXDo0neCZNmBpc3HLlk2s_N9_goDiU&callback=initMap">
+    </script>
+  </body>
+</html>

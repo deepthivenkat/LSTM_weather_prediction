@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+       #map {
+        height: 600px;
+        width: 60%;
+        padding-left:200px;
+       }
+       .wi{
+       	padding:15px;
+       	font-size:48px;
+       }
+       #icon{
+       	font-size:48px;
+       }
+    </style>
+
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Portfolio Item - Start Bootstrap Template</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/portfolio-item.css" rel="stylesheet">
+<!--   <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  <link rel="stylesheet" href="/resources/demos/style.css"> -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/weather-icons/2.0.9/css/weather-icons.css">
+<!--   <script>
+
+
+
+   $( function() {
+    $( "#datepicker" ).datepicker({
+    format: 'mm/dd/yyyy',
+    minDate:'11/14/2017',
+    maxDate: '11/18/2017'
+});
+  } );
+  </script> -->
+
+
+  </head>
+  <body>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+      <div class="container">
+        <a class="navbar-brand" href="#">Weather Prediction</a>
+    </div>
+    </nav>
+
+<div class="container">
+
+      <!-- Portfolio Item Heading -->
+      <h1 class="my-4">
+        <small>Pin point a location for prediction</small>
+      </h1>
+
+      <!-- Portfolio Item Row -->
+      <div class="row">
+
+      <div class="col-md-8" id="map">
+          <!-- <img class="img-fluid" src="http://placehold.it/750x500" alt=""> -->
+        </div>
+
+
+    <!-- <div  style="margin:40px;float: left;" id="map"></div> -->
+
+    <div class="col-md-4">
+    <i id="iconn"></i>
+<h3>Location chosen</h3>
+<p id ="location"></p>
+
+          <h3 class="my-3">Choose date here</h3>
+          <div class="form-group">
+                <div class='input-group date' id='datetimepicker1'>
+                    <input type='text' class="form-control" />
+                    <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span>
+                    </span>
+                </div>
+                
+            </div>
+            <!-- <div id="hiddendiv"><strong>some</strong> content</div> -->
+            <div class="form-group">
+<button class="btn btn-info" onclick="copyfunction();">Predict</button>
+                
+                </div>
+                <div class="form-group">
+                <table id="tg" border="1"></table>
+                </div>
+
+<p class ="icon"></p>
+          </ul>
+        </div>
+
+      </div>
+      <!-- /.row -->
+
+      <!-- Related Projects Row -->
+    <!--   <h3 class="my-4">Related Projects</h3>
+
+      <div class="row">
+
+        <div class="col-md-3 col-sm-6 mb-4">
+          <a href="#">
+          
+            <img class="img-fluid" src="http://placehold.it/500x300" alt="">
+          </a>
+        </div>
+
+        <div class="col-md-3 col-sm-6 mb-4">
+          <a href="#">
+            <img class="img-fluid" src="http://placehold.it/500x300" alt="">
+          </a>
+        </div>
+
+        <div class="col-md-3 col-sm-6 mb-4">
+          <a href="#">
+            <img class="img-fluid" src="http://placehold.it/500x300" alt="">
+          </a>
+        </div>
+
+        <div class="col-md-3 col-sm-6 mb-4">
+          <a href="#">
+            <img class="img-fluid" src="http://placehold.it/500x300" alt="">
+          </a>
+        </div>
+
+      </div>
+      <!-- /.row --> 
+
+    </div>
+    <!-- /.container -->
+
+    <!-- Footer -->
+   <!--  <footer class="py-5 bg-dark">
+      <div class="container">
+        <p class="m-0 text-center text-white">Copyright &copy; Your Website 2017</p>
+      </div> -->
+      <!-- /.container
+    </footer>
+ -->
+    <!-- Bootstrap core JavaScript -->
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/css/bootstrap-datetimepicker.min.css" />
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment.min.js"></script>                       
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
+    <!-- <script src="vendor/jquery/jquery.min.js"></script> -->
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+<!-- <div style="margin:40px;"><p>hjhkjhjhjhjh</p></div> -->
+
+    <!-- <button onclick="getLocation()">Try It</button> -->
+
+
+    <script>
+
+      var date_input='2017-10-05';
+      var ip_lat, ip_lon;
+
+      $(function () {
+                           var bindDatePicker = function() {
+                            $("#datetimepicker1").datetimepicker({
+                                format:'YYYY-MM-DD',
+                                minDate:'2017/01/01',
+                                maxDate: '2017/10/05',
+                                defaultDate:'2017/10/01',
+                              icons: {
+                                time: "fa fa-clock-o",
+                                date: "fa fa-calendar",
+                                up: "fa fa-arrow-up",
+                                down: "fa fa-arrow-down"
+                              }
+                            }).find('input:first').on("blur",function () {
+                              // check if the date is correct. We can accept dd-mm-yyyy and yyyy-mm-dd.
+                              // update the format if it's yyyy-mm-dd
+                              var date = parseDate($(this).val());
+
+                              if (! isValidDate(date)) {
+                                //create date based on momentjs (we have that)
+                                date = moment().format('YYYY-MM-DD');
+                              }
+
+                              $(this).val(date);
+                              date_input = date;
+                              return date;
+                            });
+                            
+                          }
+                           
+                         var isValidDate = function(value, format) {
+                          format = format || false;
+                          // lets parse the date to the best of our knowledge
+                          if (format) {
+                            value = parseDate(value);
+                          }
+
+                        var timestamp = Date.parse(value);
+                        // console.log(timestamp);
+
+                        return isNaN(timestamp) == false;
+   }
+   
+   var parseDate = function(value) {
+    var m = value.match(/^(\d{1,2})(\/|-)?(\d{1,2})(\/|-)?(\d{4})$/);
+    if (m)
+      value = m[5] + '-' + ("00" + m[3]).slice(-2) + '-' + ("00" + m[1]).slice(-2);
+
+    return value;
+   }
+   
+   var dt = bindDatePicker();
+   
+
+
+var x = document.getElementById("location");
+var state;
+
+function getLocation() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(showPosition);
+    } else {
+        console.log("Geolocation is not supported by this browser.");
+    }
+}
+function showPosition(position) {
+    // x.innerHTML = "Latitude: " + position.coords.latitude + 
+    // "<br>Longitude: " + position.coords.longitude;
+    this.lat=position.coords.latitude;
+    this.lon=position.coords.longitude;
+    // console.log("Latitude: innnnnn" +  typeof position.coords.latitude + 
+    // "<br>Longitude: " + position.coords.longitude) 
+
+
+codeLatLng(this.lat, this.lon);
+         var uluru = {lat: this.lat, lng: this.lon};
+         console.log("print lat long here")
+         console.log(this.lat, this.lon);
+        // var uluru = {lat: showPosition.lat, lng: showPosition.lon};
+        var map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 6,
+          center: { lat:32.43060420452329, lng: -85.07678304374997},
+          mapTypeId: google.maps.MapTypeId.ROADMAP
+        });
+        var marker = new google.maps.Marker({
+          position: uluru,
+          draggable: true,
+          map: map
+        });
+
+
+     // fog  rain_drizzle snow_ice_pellets  hail  thunder tornado_funnel_cloud
+// var label=[0,0,0,0,0,1].join("");//.toString();
+// console.log(label)
+
+
+
+        google.maps.event.addListener(marker, 'dragend', function (event) {
+            // window.open(map, marker);
+             codeLatLng(event.latLng.lat(), event.latLng.lng(),dt);
+        });
+
+
+
+}
+
+
+
+                                                                        function codeLatLng(lat, lng) {
+                                                                          geocoder = new google.maps.Geocoder();
+                                                                            var latlng = new google.maps.LatLng(lat, lng);
+                                                                            geocoder.geocode({'latLng': latlng}, function(results, status) {
+                                                                              if (status == google.maps.GeocoderStatus.OK) {
+                                                                              // console.log(results)
+                                                                                if (results) {
+                                                                                  ip_lat = lat;
+                                                                                  ip_lon = lng;
+                                                                                 //formatted address
+                                                                                 // alert(results[2].formatted_address)
+                                                                                 console.log(lat,lng)
+                                                                                 console.log(dt)
+                                                                                 for (var i = 0; i < results.length; i++) {
+                                                                                  if (results[i].formatted_address.split(" ").length<=4) {console.log(results[i].formatted_address);x.innerHTML = results[i].formatted_address;break;}
+                                                                                 }
+                                                                                for (var i = 0; i < results.length; i++) {
+                                                                                  if (results[i].formatted_address.split(" ").length==2) {
+                                                                                    // console.log(results[i].formatted_address.split(" ")[0].slice(0,-1));
+                                                                                      state = results[i].formatted_address;break;}
+                                                                                 }
+                                                                                } else {
+                                                                                  alert("No results found");
+                                                                                }
+                                                                              } else {
+                                                                                alert("Geocoder failed due to: " + status);
+                                                                              }
+                                                                            });
+                                                                        }
+  var int_map = function initMap() {
+
+  getLocation();
+
+  };
+  int_map();
+ });
+
+function copyfunction() {
+  if($(".icon")[0].childNodes[0]!= null){
+      $(".icon")[0].childNodes[0].remove()
+  }
+  
+        
+        var myUrl = "http://127.0.0.1:5000/getweather?lattitude='"+ip_lat+"' &longitude='"+ip_lon+"'&date='"+date_input+"'";
+
+var proxy = 'https://cors-anywhere.herokuapp.com/';
+
+var finalURL = proxy + myUrl;
+$("#tg").empty();
+        $.getJSON(myUrl, function( data ) {
+    console.log(data);
+    data_labels = data["pred_labels"]
+    label_arr = Object.values(data_labels);
+    label_arr = label_arr.map(String);
+    label_str = label_arr.join("")
+
+// switch(label_str) {
+
+//     case "100000":
+//         cc="wi-day-fog"
+//         break;
+//     case "001000":
+//         cc="wi-rain"
+//         break;
+//     case "000100":
+//         cc="wi-snow"
+//         break;
+//     case "010000":
+//         cc="wi-hail"
+//         break;
+//     case "000010":
+//         cc="wi-thunderstorm"
+//         break; 
+
+//     case "000001":
+//         cc="wi-tornado"
+//         break; 
+             
+//     default:
+//         cc="wi-day-sunny"
+// }
+
+var iconCode="10d"
+
+
+switch(label_str) {
+    case "010000":
+        iconCode="09d"
+        break;
+    case "100000":
+        iconCode="50d"
+        break;
+    case "001000":
+        iconCode="13d"
+        break;
+    case "100000":
+        iconCode="50d"
+        break;
+    case "000010":
+        iconCode="11d"
+        break;        
+    default:
+        iconCode="01d"
+}
+
+// document.getElementById("iconn").className = "wi "+cc;
+
+var iconUrl = "http://openweathermap.org/img/w/" + iconCode + ".png";
+$(".icon").html("<img src='" + iconUrl  + "'    width='128' height='128' >");
+    data = {"orig_values":data["orig_values"],"pred_values":data["pred_values"]}
+    var t = document.createTextNode("Original Values VS Predicted Values");
+    var tbl_body = document.createElement("tbody");
+    var odd_even = false;
+    $.each(data, function() {
+        var tbl_row = tbl_body.insertRow();
+        tbl_row.className = odd_even ? "even" : "odd";
+        $.each(this, function(k , v) {
+            console.log(k,v);
+            var cell = tbl_row.insertCell();
+            cell.appendChild(document.createTextNode(k.toString()+": "+v.toString()));
+        })        
+        odd_even = !odd_even;               
+    })
+    $("#tg")[0].appendChild(t)
+    $("#tg")[0].appendChild(tbl_body);
+});}
+        
+
+    //     var deferredData = new jQuery.Deferred();
+
+    // $.ajax({
+    //     type: "GET",
+    //     url: "http://127.0.0.1:5000/getweather?lattitude='"+ip_lat+"' &longitude='"+ip_lon+"'&date='"+date_input+"'",
+    //     dataType: "json",
+    //     success: deferredData.resolve(),
+    //     crossDomain: true,
+    //     // beforeSend: setHeader,
+    //     complete : function(xhr, textStatus) {
+    //         console.log("AJAX REquest complete -> ", xhr, " -> ", textStatus)}
+    // });
+    // }
+
+
+    </script>
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAXPEXDo0neCZNmBpc3HLlk2s_N9_goDiU&callback=initMap">
+    </script>
+  </body>
+</html>
